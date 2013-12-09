@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>DOM Demo</title>
+		<script>
+			function greetUser(){
+			  var txtBox = document.getElementById("txtName");
+			  var name = txtBox.value;
+			  var greetMsg = "Good Morning " + name + "!!!";
+			  var divMessage = document.getElementById("divMessage");
+			  divMessage.innerHTML = greetMsg;
+			}
+			function initialize(){
+				var btnGreet = document.getElementById("btnGreet");
+				btnGreet.onclick = greetUser;
+			}
+			window.onload = initialize;
+		</script>
+	</head>
+	<body>
+		<span>Name :</span>
+		<input type="text" name="" id="txtName">
+		<input type="button" value="Greet" id="btnGreet">
+		<div id="divMessage">[Greet Message will be displayed here]</div>
+		
+	</body>
+</html>
