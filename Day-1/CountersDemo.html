@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script>
+	
+	(function(){
+		var count = 0;
+		window.onload = initialize;
+		function initialize(){
+			document.getElementById("btnCount").onclick = onBtnCountClick;
+		}
+		function onBtnCountClick(){
+			displayMessage(++count);
+		}
+		function displayMessage(msg){
+			document.getElementById("divMessage").innerHTML = msg;
+		}
+	})();
+	</script>
+</head>
+<body>
+	<input type="button" value="Count" id="btnCount">
+	<div id="divMessage"></div>
+</body>
+</html>

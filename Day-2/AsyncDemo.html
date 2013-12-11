@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script>
+	(function(){
+		window.onload = initialize;
+		function initialize(){
+			document.getElementById("btnDoWork").onclick = onBtnDoWorkClick;
+		}
+		function onBtnDoWorkClick(){
+			displayMessage("Work started");
+			doWork(function(percentCompleted){
+				document.getElementById("progress").value = percentCompleted;
+			},function(){
+				document.getElementById("progress").value = 100;
+				displayMessage("Work Completed");
+			});
+		}
+		function displayMessage(msg){
+			document.getElementById("divMessage").innerHTML += msg +"<br/>";
+		}
+		function doWork(onProgressCallback, onCompletionCallback){
+			var maxIteration = 100000;
+			var iterationCount = maxIteration / 1000,
+				currentIteration = 0;
+			function oneIteration(){
+				for(var i=0;i<1000;i++)
+					for(var j=0;j<1000;j++)
+						for(var k=0;k<100;k++)
+						{}
+				currentIteration++;
+				if (currentIteration < iterationCount){
+					if (typeof onProgressCallback === "function"){
+						onProgressCallback.call(this,currentIteration);
+					}
+					setTimeout(oneIteration);
+				} else {
+					if (typeof onCompletionCallback === "function"){
+						onCompletionCallback.call(this);
+					}
+				}
+			}
+			oneIteration();
+		}
+	}());
+	</script>
+</head>
+<body>
+	<input type="text" name="" id="">
+	<input type="button" value="Do Work" id="btnDoWork">
+	<br>
+	<progress id="progress" min="0" max="100" value="0"></progress>
+	<div id="divMessage"></div>
+
+</body>
+</html>
