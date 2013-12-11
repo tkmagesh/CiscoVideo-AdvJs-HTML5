@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Web Workers Demo</title>
+	<script>
+	(function(){
+		window.addEventListener("DOMContentLoaded",initialize);
+		var taskWorker = new Worker("workerTask.js");
+		taskWorker.addEventListener("message",function(msgEvt){
+			if (msgEvt.data === "completed"){
+				displayMessage("Work Completed");	
+			} else {
+				console.log("unknown message", msgEvt);
+			}
+		})
+		function initialize(){
+			document.getElementById("btnDoWork").addEventListener("click",onBtnDoWorkClick);
+		}
+		function onBtnDoWorkClick(){
+			displayMessage("Work Started");
+			taskWorker.postMessage("start");
+			
+		}
+		function displayMessage(msg){
+			document.getElementById("divMessage").innerHTML += msg + "<br/>";
+		}
+		
+	})();	
+	</script>
+</head>
+<body>
+	<input type="text" name="" id="">
+	<input type="button" value="Do Work" id="btnDoWork">
+	<div id="divMessage"></div>
+	<progress id="progress" min="0" max="100" value="0"></progress>
+
+
+</body>
+</html>
