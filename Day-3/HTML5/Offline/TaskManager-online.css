@@ -1,0 +1,10 @@
+h1{
+	border-top: 2px solid blue;
+	border-bottom: 2px solid blue;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background-color: lightblue;
+}
+#divOfflineStatus{
+	display : none;
+}

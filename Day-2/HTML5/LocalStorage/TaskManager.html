@@ -9,9 +9,34 @@
 		text-decoration: line-through;
 		font-style: italic;
 	}
+	#divTaskCount{
+		font-size: 28pt;
+		color: grey;
+	}
 	</style>
 	<script>
 	function TaskStorage(){
+		var subscribers = {};
+		this.addSubscriber = function(eventName,subscriptionFn){
+			if (!subscribers[eventName]) subscribers[eventName] = [];
+			subscribers[eventName].push(subscriptionFn);
+		}
+		this.removeSubscriber = function(eventName,subscriptionFn){
+			for(var i=subscribers[eventName].length-1;i>=0;i--){
+				if (subscribers[eventName][i] == subscriptionFn)
+					subscribers[eventName].splice(i,1)
+			}
+			subscribers[eventName].push(subscriptionFn);
+		};
+		this.triggerEvent = function(eventName,args){
+			for(var i=0;i<subscribers[eventName].length;i++){
+				setTimeout((function(x){
+					return function(){
+						subscribers[eventName][x].apply(this,args);	
+					};
+				}(i)));
+			}
+		}
 		this.storage = window.localStorage;
 	}
 	TaskStorage.prototype.getAllTasks = function(){
@@ -27,15 +52,33 @@
 	TaskStorage.prototype.addTask = function(taskName){
 		var newId = new Date().getTime().toString();
 		this.storage.setItem(newId,taskName);
-		return {id : newId, name : taskName};
+		var newTask = {id : newId, name : taskName};
+		this.triggerEvent("add",[newTask]);
+		
+
 	};
 	TaskStorage.prototype.removeTask = function(taskId){
+		var taskToRemove = {id : taskId, name : this.storage.getItem(taskId)};
 		this.storage.removeItem(taskId);
+		this.triggerEvent("remove",[taskToRemove]);
 	}
 	</script>
 	<script>
 	(function(){
 		var taskStorage = new TaskStorage();
+		var taskCount = 0;
+		taskStorage.addSubscriber("add",addTaskToUi);
+		taskStorage.addSubscriber("add",incTaskCount);
+		taskStorage.addSubscriber("remove",removeTaskFromUi);
+		taskStorage.addSubscriber("remove",decTaskCount);
+
+
+		function incTaskCount(){
+			document.getElementById("divTaskCount").innerHTML = ++taskCount;
+		}
+		function decTaskCount(){
+			document.getElementById("divTaskCount").innerHTML = --taskCount;
+		}
 		function initialize(){
 			document.getElementById("btnAddTask").onclick = onBtnAddTaskClick;
 			document.getElementById("btnRemoveCompleted").onclick = onBtnRemoveCompletedClick;
@@ -46,6 +89,8 @@
 			var allTasks = taskStorage.getAllTasks();
 			for(var i=0;i<allTasks.length;i++){
 				addTaskToUi(allTasks[i]);
+				incTaskCount();
+
 			}
 		}
 		function addTaskToUi(task){
@@ -58,6 +103,11 @@
 
 			ulTaskList.appendChild(newTaskItem);
 		}
+		function removeTaskFromUi(task){
+			console.log(task);
+			var completedTaskItem = document.querySelector("#ulTaskList > li[task-id='" + task.id + "']");
+			completedTaskItem.remove();
+		}
 		
 		function onTaskItemClick(){
 			if (this.classList.contains("completed")){
@@ -69,13 +119,13 @@
 		function onBtnAddTaskClick(){
 			var taskName = document.getElementById("txtTask").value;
 			var newTask = taskStorage.addTask(taskName);
-			addTaskToUi(newTask);
+			
 		}
 		function onBtnRemoveCompletedClick(){
 			var completedTaskItems = document.querySelectorAll("#ulTaskList > li.completed");
 			for(var i=0;i<completedTaskItems.length;i++){
 				taskStorage.removeTask(completedTaskItems[i].getAttribute("task-id"));
-				completedTaskItems[i].remove();
+				
 			}
 		}
 		window.onload = initialize;
@@ -92,5 +142,6 @@
 		
 	</ul>
 	<div id="divMessage"></div>
+	<div id="divTaskCount">[Task Count]</div>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script>
+	(function(){
+		window.onload = initialize;
+		function initialize(){
+			document.getElementById("btnTest").addEventListener("click",onBtnTestClick);
+		}
+		function onBtnTestClick(){
+			console.log("Test button is clicked");
+		}
+	})();
+	</script>
+</head>
+<body>
+	<input type="button" value="Test" id="btnTest">
+</body>
+</html>

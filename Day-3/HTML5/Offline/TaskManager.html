@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" manifest="app.manifest">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<link rel="stylesheet" href="TaskManager.css">
+	<link rel="stylesheet" href="TaskManager-online.css">
+	<script src="TaskStorage.js"></script>
+	<script src="TaskManager.js"></script>
+</head>
+<body>
+	<div id="divOfflineStatus">
+		[Offline mode!]
+	</div>
+	<h1>Task Manager Ver-1.3</h1>
+	<span>Task :</span>
+	<input type="text" name="" id="txtTask">
+	<input type="button" value="Add Task" id="btnAddTask">
+	<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+	<ul id="ulTaskList">
+		
+	</ul>
+	<div id="divMessage"></div>
+	<div id="divTaskCount">[Task Count]</div>
+	<div id="divCacheUpdateReady">
+		A new version of the application is available in the cache. Do you want to refresh?
+		<input type="button" value="Yes" id="btnYes">
+		<input type="button" value="No" id="btnNo">
+	</div>
+</body>
+</html>
